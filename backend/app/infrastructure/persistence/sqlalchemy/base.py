@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -12,6 +15,9 @@ class Base(DeclarativeBase):
 
 
 def build_engine(database_url: str) -> AsyncEngine:
+    url = make_url(database_url)
+    if url.drivername.startswith("sqlite") and url.database not in (None, ":memory:"):
+        Path(url.database).resolve().parent.mkdir(parents=True, exist_ok=True)
     return create_async_engine(database_url, echo=False)
 
 

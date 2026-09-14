@@ -66,7 +66,7 @@ cp .env.example .env
 |---|---|---|
 | `APP_NAME` | `student-registration-service` | Nombre del servicio |
 | `DEBUG` | `false` | Modo debug |
-| `DATABASE_URL` | `sqlite+aiosqlite:///./students.db` | URL de conexión async a la base de datos |
+| `DATABASE_URL` | `sqlite+aiosqlite:///<repo>/data/db/students.db` | URL de conexión async a la base de datos. `data/` vive al mismo nivel que `backend/` y `frontend/`; el directorio se crea solo si no existe. |
 
 ## Ejecutar el servidor
 
