@@ -1,0 +1,191 @@
+{
+  "info": {
+    "_postman_id": "9ee6bc13-0e48-487a-8180-0494ea64d8c8",
+    "name": "Student Registration Service",
+    "description": "API para el registro y administración de alumnos de un curso/capacitación. Ver README.md del backend para el detalle de la arquitectura.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "student_dni",
+      "value": "30123456",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Students",
+      "item": [
+        {
+          "name": "Create Student",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('student_id', body.id);",
+                  "    pm.collectionVariables.set('student_dni', body.dni);",
+                  "}",
+                  "",
+                  "pm.test('Status code is 201', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Perez\",\n  \"dni\": \"30123456\",\n  \"date_of_birth\": \"1995-05-20\",\n  \"phone\": \"+54 9 11 1234-5678\",\n  \"email\": \"juan.perez@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/students",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students"]
+            },
+            "description": "Registra un nuevo alumno. Falla con 409 si el DNI ya existe y con 422 si el formato de DNI/email es inválido."
+          },
+          "response": []
+        },
+        {
+          "name": "List Students",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/students?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            },
+            "description": "Devuelve un listado paginado de alumnos."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students", "{{student_id}}"]
+            },
+            "description": "Devuelve 404 si el alumno no existe."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Student by DNI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/students/dni/{{student_dni}}",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students", "dni", "{{student_dni}}"]
+            },
+            "description": "Devuelve 404 si no existe un alumno con ese DNI."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Student (Partial)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+54 11 4444-4444\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students", "{{student_id}}"]
+            },
+            "description": "Actualiza parcialmente un alumno. Solo se envían los campos a modificar. Devuelve 409 si el nuevo DNI ya está en uso."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "students", "{{student_id}}"]
+            },
+            "description": "Elimina un alumno. Devuelve 204 sin contenido, o 404 si ya no existe."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

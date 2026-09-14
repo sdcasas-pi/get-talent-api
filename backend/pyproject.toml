@@ -1,0 +1,57 @@
+[project]
+name = "student-registration-service"
+version = "1.0.0"
+requires-python = ">=3.12"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "S",    # flake8-bandit (security)
+    "T20",  # flake8-print (no print)
+    "SIM",  # flake8-simplify
+    "ASYNC",# flake8-async
+]
+# UP017: CLAUDE.md #17.2 mandates `datetime.now(timezone.utc)` explicitly over
+# the `datetime.UTC` alias, so this pyupgrade suggestion is intentionally off.
+ignore = ["UP017"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's DI pattern requires calling Depends()/Query() in argument defaults
+# (CLAUDE.md #6) — these are immutable factory calls, not the mutable-default
+# footgun B008 guards against.
+extend-immutable-calls = ["fastapi.Depends", "fastapi.Query"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+# DomainException intentionally has no "Error" suffix — CLAUDE.md #7.3 names
+# it exactly this way as the base for all domain exceptions.
+"app/domain/exceptions/base.py" = ["N818"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "--cov=app --cov-report=term-missing --cov-fail-under=85"
