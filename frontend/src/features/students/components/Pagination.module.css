@@ -1,0 +1,24 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.summary {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.page {
+  font-size: 13px;
+  font-weight: 700;
+}

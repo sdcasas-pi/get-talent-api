@@ -1,0 +1,58 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 18, 18, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  z-index: 100;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - var(--space-7));
+  overflow-y: auto;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  outline: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-5) 0;
+}
+
+.title {
+  font-size: 20px;
+}
+
+.closeButton {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-sunken);
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+.closeButton:hover {
+  background: var(--pi-yellow);
+}
+
+.body {
+  padding: var(--space-5);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-5);
+}
